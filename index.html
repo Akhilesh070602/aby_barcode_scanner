@@ -68,20 +68,11 @@
             cursor: pointer;
         }
 
-        button:hover {
-            background: darkred;
-        }
-
-        .table-container {
-            overflow-x: auto;
-        }
-
         table {
             width: 100%;
             margin-top: 10px;
             border-collapse: collapse;
             border: 1px solid red;
-            min-width: 600px;
         }
 
         th, td {
@@ -90,16 +81,13 @@
             text-align: center;
         }
 
-        th {
-            color: red;
-            background: #fff5f5;
-        }
-
+        /* Bottom section */
         .bottom {
             display: flex;
             justify-content: space-between;
             margin-top: 20px;
             flex-wrap: wrap;
+            gap: 10px;
         }
 
         .weights {
@@ -124,16 +112,30 @@
             background: rgba(0,0,0,0.7);
             justify-content: center;
             align-items: center;
-            z-index: 1000;
         }
 
         .modal-content {
+            position: relative;
             background: white;
             padding: 20px;
             border-radius: 10px;
             text-align: center;
             width: 90%;
             max-width: 400px;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 20px;
+            cursor: pointer;
+            color: red;
+        }
+
+        .flip-btn {
+            font-size: 20px;
+            margin-bottom: 10px;
         }
 
         @media (max-width: 768px) {
@@ -152,7 +154,6 @@
 
 <div class="main-container">
 
-    <!-- Header -->
     <div class="header">
         <div class="header-left">
             <img src="logo.png" class="logo">
@@ -163,79 +164,82 @@
 
     <div class="card">
 
+        <!-- Input -->
         <h4>Enter Code</h4>
-
         <div class="input-section">
             <input type="text" id="inputCode" placeholder="Scan or Enter Code">
-
-            <button onclick="openScanner()">Scan Barcode</button>
-            <button onclick="fetchData()">Fetch Data</button>
+            <button onclick="openScanner()">Scan</button>
         </div>
 
+        <!-- PO Table -->
         <h4>PO Data</h4>
-        <div class="table-container">
-            <table id="poTable">
-                <thead>
-                    <tr>
-                        <th>PO NO</th>
-                        <th>Material</th>
-                        <th>Date</th>
-                        <th>Cone</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
-        </div>
+        <table id="poTable">
+            <thead>
+                <tr>
+                    <th>PO NO</th>
+                    <th>Material</th>
+                    <th>Date</th>
+                    <th>Cone</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
 
+        <!-- Line Items -->
         <h4>Line Items</h4>
-        <div class="table-container">
-            <table id="lineTable">
-                <thead>
-                    <tr>
-                        <th>List</th>
-                        <th>Name</th>
-                        <th>Weight</th>
-                        <th>Material</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
-        </div>
+        <table id="lineTable">
+            <thead>
+                <tr>
+                    <th>List</th>
+                    <th>Name</th>
+                    <th>Weight</th>
+                    <th>Material</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
 
+        <!-- 🔥 WEIGHTS + CONFIRM -->
         <div class="bottom">
+
             <div class="weights">
                 <div>
                     <label>Standard Weight</label>
                     <input type="text" id="stdWeight">
                 </div>
+
                 <div>
                     <label>Actual Weight</label>
                     <input type="text" id="actWeight">
                 </div>
             </div>
+
             <button onclick="confirmData()">Confirm</button>
+
         </div>
 
     </div>
 
 </div>
 
-<!-- Popup Scanner -->
+<!-- Popup -->
 <div id="qrModal">
     <div class="modal-content">
-        <h3>Scan Barcode</h3>
 
-        <!-- 🔄 GPay style switch -->
-        <button onclick="switchCamera()">🔄 Switch Camera</button>
+        <span class="close-btn" onclick="cancelScanner()">✖</span>
 
-        <div id="reader" style="margin-top:10px;"></div>
+        <h3>Scan Code</h3>
+
+        <button class="flip-btn" onclick="switchCamera()">🔄</button>
+
+        <div id="reader"></div>
 
         <br>
         <button onclick="stopScanner()">Stop Camera</button>
+
     </div>
 </div>
 
-<!-- Scripts -->
 <script src="https://unpkg.com/html5-qrcode"></script>
 <script src="script.js"></script>
 
