@@ -29,29 +29,24 @@ function openScanner() {
     });
 }
 
-// Fast camera
+// 🔥 STABLE CAMERA
 function startCamera() {
 
     safeStopScanner().then(() => {
 
-        qr = new Html5Qrcode("reader", {
-            formatsToSupport: [
-                Html5QrcodeSupportedFormats.CODE_128,
-                Html5QrcodeSupportedFormats.CODE_39,
-                Html5QrcodeSupportedFormats.EAN_13,
-                Html5QrcodeSupportedFormats.EAN_8
-            ]
-        });
+        qr = new Html5Qrcode("reader"); // support ALL codes
 
         let cameraId = cameras[currentCameraIndex].id;
 
         qr.start(
             cameraId,
             {
-                fps: 15,
-                qrbox: { width: 200, height: 200 }
+                fps: 10,
+                qrbox: 250
             },
             (text) => {
+
+                console.log("Scanned:", text);
 
                 document.getElementById("inputCode").value = text;
 
@@ -64,13 +59,16 @@ function startCamera() {
                     <tr><td>2</td><td>Item B</td><td>11.2</td><td>Silk</td></tr>
                 `;
 
-                // 🔥 KEEP BLANK
+                // Keep blank
                 stdWeight.value = "";
                 actWeight.value = "";
 
                 stopScanner();
             }
-        );
+        ).catch(err => {
+            console.log("Start error:", err);
+        });
+
     });
 }
 
