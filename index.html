@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Aditya Birla Group Production Dispatch</title>
+    <title>Production Dispatch</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -101,6 +101,14 @@
             flex-direction: column;
         }
 
+        /* ✅ Fix confirm button */
+        .confirm-btn {
+            width: auto !important;
+            padding: 10px 25px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
         /* Popup */
         #qrModal {
             display: none;
@@ -142,9 +150,12 @@
             .input-section, .bottom, .weights {
                 flex-direction: column;
             }
-
             button {
                 width: 100%;
+            }
+            .confirm-btn {
+                width: auto;
+                align-self: center;
             }
         }
     </style>
@@ -199,22 +210,22 @@
             <tbody></tbody>
         </table>
 
-        <!-- 🔥 WEIGHTS + CONFIRM -->
+        <!-- Weights + Confirm -->
         <div class="bottom">
 
             <div class="weights">
                 <div>
                     <label>Standard Weight</label>
-                    <input type="text" id="stdWeight">
+                    <input type="text" id="stdWeight" placeholder="Enter Standard Weight">
                 </div>
 
                 <div>
                     <label>Actual Weight</label>
-                    <input type="text" id="actWeight">
+                    <input type="text" id="actWeight" placeholder="Enter Actual Weight">
                 </div>
             </div>
 
-            <button onclick="confirmData()">Confirm</button>
+            <button class="confirm-btn" onclick="confirmData()">Confirm</button>
 
         </div>
 
@@ -228,7 +239,7 @@
 
         <span class="close-btn" onclick="cancelScanner()">✖</span>
 
-        <h3>Scan Code</h3>
+        <h3>Scan Barcode</h3>
 
         <button class="flip-btn" onclick="switchCamera()">🔄</button>
 

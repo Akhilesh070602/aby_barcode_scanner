@@ -19,7 +19,6 @@ function openScanner() {
 
         cameras = devices;
 
-        // Start with back camera
         let backIndex = devices.findIndex(cam =>
             cam.label.toLowerCase().includes("back")
         );
@@ -30,35 +29,48 @@ function openScanner() {
     });
 }
 
-// Start camera
+// Fast camera
 function startCamera() {
 
     safeStopScanner().then(() => {
 
-        qr = new Html5Qrcode("reader");
+        qr = new Html5Qrcode("reader", {
+            formatsToSupport: [
+                Html5QrcodeSupportedFormats.CODE_128,
+                Html5QrcodeSupportedFormats.CODE_39,
+                Html5QrcodeSupportedFormats.EAN_13,
+                Html5QrcodeSupportedFormats.EAN_8
+            ]
+        });
 
         let cameraId = cameras[currentCameraIndex].id;
 
-        qr.start(cameraId, { fps: 10, qrbox: 250 }, (text) => {
+        qr.start(
+            cameraId,
+            {
+                fps: 15,
+                qrbox: { width: 200, height: 200 }
+            },
+            (text) => {
 
-            document.getElementById("inputCode").value = text;
+                document.getElementById("inputCode").value = text;
 
-            // Dummy fill data
-            document.querySelector("#poTable tbody").innerHTML = `
-                <tr><td>${text}</td><td>Cotton</td><td>26-03-2026</td><td>5</td></tr>
-            `;
+                document.querySelector("#poTable tbody").innerHTML = `
+                    <tr><td>${text}</td><td>Cotton</td><td>26-03-2026</td><td>5</td></tr>
+                `;
 
-            document.querySelector("#lineTable tbody").innerHTML = `
-                <tr><td>1</td><td>Item A</td><td>10.5</td><td>Cotton</td></tr>
-                <tr><td>2</td><td>Item B</td><td>11.2</td><td>Silk</td></tr>
-            `;
+                document.querySelector("#lineTable tbody").innerHTML = `
+                    <tr><td>1</td><td>Item A</td><td>10.5</td><td>Cotton</td></tr>
+                    <tr><td>2</td><td>Item B</td><td>11.2</td><td>Silk</td></tr>
+                `;
 
-            // Auto weights
-            stdWeight.value = "12.5";
-            actWeight.value = "11.9";
+                // 🔥 KEEP BLANK
+                stdWeight.value = "";
+                actWeight.value = "";
 
-            stopScanner();
-        });
+                stopScanner();
+            }
+        );
     });
 }
 
