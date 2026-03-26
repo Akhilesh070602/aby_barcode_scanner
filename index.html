@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Aditya Birla Group Production Dispatch</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        body {
+            font-family: Arial;
+            background-color: #e5e5e5;
+            margin: 0;
+        }
+
+        .main-container {
+            width: 95%;
+            max-width: 1200px;
+            margin: 20px auto;
+            border: 2px solid red;
+            padding: 15px;
+            background: #f7f7f7;
+            border-radius: 10px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            color: red;
+            flex-wrap: wrap;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo {
+            width: 60px;
+        }
+
+        .card {
+            background: #efefef;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 10px;
+        }
+
+        .input-section {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        input {
+            padding: 10px;
+            border: 1px solid red;
+            border-radius: 6px;
+            flex: 1;
+            min-width: 150px;
+        }
+
+        button {
+            background: red;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        button:hover {
+            background: darkred;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            margin-top: 10px;
+            border-collapse: collapse;
+            border: 1px solid red;
+            min-width: 600px;
+        }
+
+        th, td {
+            border: 1px solid #f1b5b5;
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            color: red;
+            background: #fff5f5;
+        }
+
+        .bottom {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .weights {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .weights div {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 🔥 POPUP */
+        #qrModal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+        }
+
+        @media (max-width: 768px) {
+            .input-section, .bottom, .weights {
+                flex-direction: column;
+            }
+
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="main-container">
+
+    <!-- Header -->
+    <div class="header">
+        <div class="header-left">
+            <img src="logo.png" class="logo">
+            <h3>Production Dispatch</h3>
+        </div>
+        <div>Plant 1</div>
+    </div>
+
+    <div class="card">
+
+        <!-- Input Section -->
+        <h4>Enter Code</h4>
+
+        <div class="input-section">
+            <input type="text" id="inputCode" placeholder="Enter Code">
+
+            <!-- QR Button -->
+            <button onclick="openScanner()">Scan QR</button>
+
+            <!-- Fetch Button -->
+            <button onclick="fetchData()">Fetch Data</button>
+        </div>
+
+        <!-- PO Data -->
+        <h4>PO Data</h4>
+        <div class="table-container">
+            <table id="poTable">
+                <thead>
+                    <tr>
+                        <th>PO NO</th>
+                        <th>Material</th>
+                        <th>Date</th>
+                        <th>Cone</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+        <!-- Line Items -->
+        <h4>Line Items</h4>
+        <div class="table-container">
+            <table id="lineTable">
+                <thead>
+                    <tr>
+                        <th>List</th>
+                        <th>Name</th>
+                        <th>Weight</th>
+                        <th>Material</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+        <!-- Bottom -->
+        <div class="bottom">
+            <div class="weights">
+                <div>
+                    <label>Standard Weight</label>
+                    <input type="text" id="stdWeight">
+                </div>
+                <div>
+                    <label>Actual Weight</label>
+                    <input type="text" id="actWeight">
+                </div>
+            </div>
+            <button onclick="confirmData()">Confirm</button>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- 🔥 QR POPUP -->
+<div id="qrModal">
+    <div class="modal-content">
+        <h3>Scan QR Code</h3>
+        <div id="reader"></div>
+        <br>
+        <button onclick="stopScanner()">Stop Camera</button>
+    </div>
+</div>
+
+<!-- Scripts -->
+<script src="https://unpkg.com/html5-qrcode"></script>
+<script src="script.js"></script>
+
+</body>
+</html>
