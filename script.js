@@ -34,12 +34,10 @@ function startCamera() {
 
     safeStopScanner().then(() => {
 
-        qr = new Html5Qrcode("reader"); // support ALL codes
-
-        let cameraId = cameras[currentCameraIndex].id;
+        qr = new Html5Qrcode("reader");
 
         qr.start(
-            cameraId,
+            { facingMode: "environment" }, // 🔥 FORCE BACK CAMERA
             {
                 fps: 10,
                 qrbox: 250
@@ -59,7 +57,6 @@ function startCamera() {
                     <tr><td>2</td><td>Item B</td><td>11.2</td><td>Silk</td></tr>
                 `;
 
-                // Keep blank
                 stdWeight.value = "";
                 actWeight.value = "";
 
