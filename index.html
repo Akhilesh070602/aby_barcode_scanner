@@ -2,7 +2,6 @@
 <html>
 <head>
     <title>Aditya Birla Group Production Dispatch</title>
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <style>
@@ -26,7 +25,6 @@
             display: flex;
             justify-content: space-between;
             color: red;
-            flex-wrap: wrap;
         }
 
         .header-left {
@@ -49,7 +47,6 @@
         .input-section {
             display: flex;
             gap: 10px;
-            flex-wrap: wrap;
         }
 
         input {
@@ -85,14 +82,11 @@
             display: flex;
             justify-content: space-between;
             margin-top: 20px;
-            flex-wrap: wrap;
-            gap: 10px;
         }
 
         .weights {
             display: flex;
             gap: 10px;
-            flex-wrap: wrap;
         }
 
         .weights div {
@@ -101,13 +95,11 @@
         }
 
         .confirm-btn {
-            width: auto !important;
             padding: 10px 25px;
             border-radius: 20px;
-            font-weight: bold;
         }
 
-        /* Popup */
+        /* 🔥 FULL SCREEN SCANNER */
         #qrModal {
             display: none;
             position: fixed;
@@ -115,44 +107,125 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.7);
-            justify-content: center;
-            align-items: center;
+            background: black;
         }
 
         .modal-content {
             position: relative;
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-            width: 90%;
-            max-width: 400px;
+            width: 100%;
+            height: 100%;
         }
 
+        /* ❌ Close */
         .close-btn {
             position: absolute;
-            top: 10px;
-            right: 15px;
-            font-size: 20px;
-            cursor: pointer;
-            color: red;
+            top: 20px;
+            right: 20px;
+            font-size: 26px;
+            color: white;
+            z-index: 2;
         }
 
-        .flip-btn {
+        /* 🔄 Flip */
+        .flip-icon {
+            position: absolute;
+            top: 20px;
+            right: 80px;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: white;
+            color: black;
             font-size: 20px;
-            margin-bottom: 10px;
+            border: none;
+            z-index: 2;
+        }
+
+        /* 🔥 SCAN FRAME */
+        .scan-frame {
+            position: absolute;
+            top: 45%;
+            left: 50%;
+            transform: translate(-50%, -45%);
+            width: 95%;
+            max-width: 350px;
+            aspect-ratio: 1/1;
+            box-shadow: 0 0 0 1000px rgba(0,0,0,0.6);
+            border-radius: 10px;
+        }
+
+        #reader {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            border-radius: 10px;
+        }
+
+        #reader video {
+            object-fit: cover;
+        }
+
+        /* 🔳 CORNERS */
+        .scan-frame::before,
+        .scan-frame::after,
+        .scan-frame span::before,
+        .scan-frame span::after {
+            content: "";
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            border: 4px solid white;
+        }
+
+        .scan-frame::before {
+            top: 0;
+            left: 0;
+            border-right: none;
+            border-bottom: none;
+        }
+
+        .scan-frame span::before {
+            top: 0;
+            right: 0;
+            border-left: none;
+            border-bottom: none;
+        }
+
+        .scan-frame span::after {
+            bottom: 0;
+            left: 0;
+            border-right: none;
+            border-top: none;
+        }
+
+        .scan-frame::after {
+            bottom: 0;
+            right: 0;
+            border-left: none;
+            border-top: none;
+        }
+
+        /* 🟥 STOP BUTTON */
+        .stop-btn {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: red;
+            padding: 12px 25px;
+            border-radius: 25px;
         }
 
         @media (max-width: 768px) {
             .input-section, .bottom, .weights {
                 flex-direction: column;
             }
+
             button {
                 width: 100%;
             }
+
             .confirm-btn {
-                width: auto;
                 align-self: center;
             }
         }
@@ -176,7 +249,7 @@
         <h4>Enter Code</h4>
 
         <div class="input-section">
-            <input type="text" id="inputCode" placeholder="Scan or Enter Code">
+            <input type="text" id="inputCode" placeholder="Scan QR Code">
             <button onclick="openScanner()">Scan</button>
         </div>
 
@@ -207,41 +280,39 @@
         </table>
 
         <div class="bottom">
-
             <div class="weights">
                 <div>
                     <label>Standard Weight</label>
-                    <input type="text" id="stdWeight" placeholder="Enter Standard Weight">
+                    <input type="text" id="stdWeight">
                 </div>
 
                 <div>
                     <label>Actual Weight</label>
-                    <input type="text" id="actWeight" placeholder="Enter Actual Weight">
+                    <input type="text" id="actWeight">
                 </div>
             </div>
 
             <button class="confirm-btn" onclick="confirmData()">Confirm</button>
-
         </div>
 
     </div>
 
 </div>
 
-<!-- Popup -->
+<!-- 🔥 SCANNER -->
 <div id="qrModal">
     <div class="modal-content">
 
         <span class="close-btn" onclick="cancelScanner()">✖</span>
 
-        <h3>Scan Barcode</h3>
+        <button class="flip-icon" onclick="switchCamera()">🔄</button>
 
-        <button class="flip-btn" onclick="switchCamera()">🔄</button>
+        <div class="scan-frame">
+            <span></span>
+            <div id="reader"></div>
+        </div>
 
-        <div id="reader"></div>
-
-        <br>
-        <button onclick="stopScanner()">Stop Camera</button>
+        <button class="stop-btn" onclick="stopScanner()">Stop</button>
 
     </div>
 </div>

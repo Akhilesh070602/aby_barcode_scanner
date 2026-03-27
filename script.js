@@ -70,9 +70,39 @@ function startCamera() {
 }
 
 // Flip camera
+let useBackCamera = true;
+
 function switchCamera() {
-    currentCameraIndex = (currentCameraIndex + 1) % cameras.length;
-    startCamera();
+
+    const btn = document.getElementById("flipCameraBtn");
+
+    // 🔥 Add rotation animation
+    btn.classList.add("flip-rotate");
+
+    setTimeout(() => {
+        btn.classList.remove("flip-rotate");
+    }, 300);
+
+    useBackCamera = !useBackCamera;
+
+    safeStopScanner().then(() => {
+
+        qr = new Html5Qrcode("reader");
+
+        qr.start(
+            { facingMode: useBackCamera ? "environment" : "user" },
+            {
+                fps: 10,
+                qrbox: 250
+            },
+            (text) => {
+
+                document.getElementById("inputCode").value = text;
+                stopScanner();
+            }
+        );
+
+    });
 }
 
 // Stop
